@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-xmlTree = ET.parse("/home/sarthak/4yr_project/tag-data.xml")
+xmlTree = ET.parse("../tag-data.xml")
 articles = xmlTree.getroot()
 
 # map between tags and their counts

@@ -2,8 +2,9 @@ import html2text
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import os
+import pickle
 
-def getTokenisedFromHTML(path):
+def getTokenisedFromHTML(path): 
     with open(path, 'r') as contentFile:
         content = contentFile.read()
         textVersion = html2text.html2text(content)
@@ -18,20 +19,32 @@ def getTokenisedFromHTML(path):
         stopWords = set(stopwords.words('english'))
         wordTokens = word_tokenize(lowerText)
         filteredTokens = [w for w in wordTokens if (w not in stopWords and len(w) > 1)]
+        text  = ' '.join(filteredTokens)
+        return text
+        # termFrequencyMap = dict()
 
-        termFrequencyMap = dict()
+        # for token in filteredTokens:
+        #     if token not in termFrequencyMap:
+        #         termFrequencyMap[token] = 0
+        #     termFrequencyMap[token] += 1
 
-        for token in filteredTokens:
-            if token not in termFrequencyMap:
-                termFrequencyMap[token] = 0
-            termFrequencyMap[token] += 1
-
-readParentPath = '/home/sarthak/4yr_project/documents'
-writeParentPath = '/home/sarthak/4yr_project/tokenised'
+readParentPath = '../doc/'
+writeParentPath = '../tokenised'
+hash_with_text='docText'
+os.remove(hash_with_text)
 
 for file in os.listdir(readParentPath):
     filePath = os.path.join(readParentPath, file)
-    tokens = getTokensFromHTML(filePath)
+    tokens = getTokenisedFromHTML(filePath)
+    
+    with open(hash_with_text,'a') as f:
+        f.write(file+": "+tokens+'\n')
+
+    # new_file=file+'.pkl'
+    # with open(new_file,'wb') as f:
+    #     pickle.dump(token,f)
 
 
-for file in
+
+
+# for file in

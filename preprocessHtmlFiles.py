@@ -28,7 +28,7 @@ def getTokenisedFromHTML(path):
         #         termFrequencyMap[token] = 0
         #     termFrequencyMap[token] += 1
 
-readParentPath = '../doc/'
+readParentPath = '../documents/'
 writeParentPath = '../tokenised'
 hash_with_text='docText'
 os.remove(hash_with_text)

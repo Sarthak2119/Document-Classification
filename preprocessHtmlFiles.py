@@ -2,7 +2,6 @@ import html2text
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import os
-import pickle
 
 def getTokenisedFromHTML(path): 
     with open(path, 'r') as contentFile:
@@ -19,32 +18,35 @@ def getTokenisedFromHTML(path):
         stopWords = set(stopwords.words('english'))
         wordTokens = word_tokenize(lowerText)
         filteredTokens = [w for w in wordTokens if (w not in stopWords and len(w) > 1)]
-        text  = ' '.join(filteredTokens)
+        text = ' '.join(filteredTokens)
         return text
-        # termFrequencyMap = dict()
 
-        # for token in filteredTokens:
-        #     if token not in termFrequencyMap:
-        #         termFrequencyMap[token] = 0
-        #     termFrequencyMap[token] += 1
 
-readParentPath = '../documents/'
-writeParentPath = '../tokenised'
-hash_with_text='docText'
-os.remove(hash_with_text)
+readParentPath = '/home/sarthak/4yr_project/documents/'
+writeParentPath = '/home/sarthak/4yr_project/tokenised/'
+
+wordDocumentFreqMap = dict()
 
 for file in os.listdir(readParentPath):
-    filePath = os.path.join(readParentPath, file)
-    tokens = getTokenisedFromHTML(filePath)
-    
-    with open(hash_with_text,'a') as f:
-        f.write(file+": "+tokens+'\n')
+    readFilePath = os.path.join(readParentPath, file)
+    tokens = getTokenisedFromHTML(readFilePath)
+    writeFilePath = os.path.join(writeParentPath, file)
 
-    # new_file=file+'.pkl'
-    # with open(new_file,'wb') as f:
-    #     pickle.dump(token,f)
+    with open(writeFilePath, 'w') as writeFile:
+        writeFile.write(tokens)
 
+    tokenList = tokens.split(sep=' ')
+    tokenSet = set(tokenList)
+    for term in tokenSet:
+        if term not in wordDocumentFreqMap:
+            wordDocumentFreqMap[term] = 0
+        wordDocumentFreqMap[term] += 1
 
-
-
-# for file in
+wordDocumentFreqPath = '/home/sarthak/4yr_project/word_doc_freq'
+try:
+    os.remove(wordDocumentFreqPath)
+except OSError:
+    pass
+with open(wordDocumentFreqPath, 'a') as wordDocumentFreqFile:
+    for term in sorted(wordDocumentFreqMap, key=wordDocumentFreqMap.get, reverse=True):
+        wordDocumentFreqFile.write(term + " " + str(wordDocumentFreqMap[term]) + "\n")
